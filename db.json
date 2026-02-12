@@ -1,0 +1,140 @@
+{
+  "videojuegos": [
+    {
+      "id": "1",
+      "nombre": "Elden Ring",
+      "descripcion": "Un épico juego de rol de acción en un vasto mundo abierto creado por Hidetaka Miyazaki y George R.R. Martin.",
+      "fechaLanzamiento": "2022-02-25",
+      "compania": "FromSoftware",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One"
+      ],
+      "categorias": [
+        "Rol",
+        "Aventura"
+      ],
+      "precio": 59.99,
+      "imagenUrl": "https://images.igdb.com/igdb/image/upload/t_cover_big/co4zzi.jpg",
+      "videoUrl": "https://www.youtube.com/watch?v=E3Huy2cdih0"
+    },
+    {
+      "id": "5",
+      "nombre": "Super Mario Odyssey",
+      "descripcion": "Acompaña a Mario en una aventura trotamundos en 3D para rescatar a la princesa Peach de Bowser.",
+      "fechaLanzamiento": "2017-10-27",
+      "compania": "Nintendo",
+      "plataformas": [
+        "Switch"
+      ],
+      "categorias": [
+        "Plataformas",
+        "Aventura"
+      ],
+      "precio": 59.99,
+      "imagenUrl": "https://images.igdb.com/igdb/image/upload/t_cover_big/co1m91.jpg",
+      "videoUrl": "https://www.youtube.com/watch?v=WlsCWid69Vw"
+    },
+    {
+      "id": "6",
+      "nombre": "Street Fighter 6",
+      "descripcion": "La última entrega de la icónica saga de lucha con nuevos modos y personajes.",
+      "fechaLanzamiento": "2023-06-02",
+      "compania": "Capcom",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One"
+      ],
+      "categorias": [
+        "Lucha"
+      ],
+      "precio": 59.99,
+      "imagenUrl": "https://images.igdb.com/igdb/image/upload/t_cover_big/co5804.jpg",
+      "videoUrl": "https://www.youtube.com/watch?v=pAnVvKOkI-Y"
+    },
+    {
+      "id": "7",
+      "nombre": "Hollow Knight",
+      "descripcion": "Una aventura de acción clásica en 2D en un mundo vasto e interconectado.",
+      "fechaLanzamiento": "2017-02-24",
+      "compania": "Team Cherry",
+      "plataformas": [
+        "PC",
+        "Switch",
+        "PS5",
+        "Xbox One"
+      ],
+      "categorias": [
+        "Plataformas",
+        "Aventura"
+      ],
+      "precio": 14.99,
+      "imagenUrl": "https://images.igdb.com/igdb/image/upload/t_cover_big/co1r7f.jpg",
+      "videoUrl": "https://www.youtube.com/watch?v=UAO2urG23S4"
+    },
+    {
+      "id": "8",
+      "nombre": "Civilization VI",
+      "descripcion": "Construye un imperio que resista el paso del tiempo en este galardonado juego de estrategia.",
+      "fechaLanzamiento": "2016-10-21",
+      "compania": "Firaxis Games",
+      "plataformas": [
+        "PC",
+        "Switch",
+        "Android",
+        "iOS"
+      ],
+      "categorias": [
+        "Estrategia",
+        "Simulación"
+      ],
+      "precio": 59.99,
+      "imagenUrl": "https://images.igdb.com/igdb/image/upload/t_cover_big/co1r1e.jpg",
+      "videoUrl": "https://www.youtube.com/watch?v=5KdEakS83v4"
+    },
+    {
+      "id": "9",
+      "nombre": "Tetris Effect: Connected",
+      "descripcion": "Tetris como nunca lo habías visto, oído o sentido antes.",
+      "fechaLanzamiento": "2020-11-10",
+      "compania": "Monstars Inc.",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One",
+        "Switch"
+      ],
+      "categorias": [
+        "Puzzle",
+        "Arcade"
+      ],
+      "precio": 39.99,
+      "imagenUrl": "https://images.igdb.com/igdb/image/upload/t_cover_big/co2h0m.jpg",
+      "videoUrl": "https://www.youtube.com/watch?v=zIsHh8H9n40"
+    },
+    {
+      "id": "10",
+      "nombre": "Stardew Valley",
+      "descripcion": "Has heredado la vieja parcela agrícola de tu abuelo en Stardew Valley. ¿Podrás aprender a vivir de la tierra?",
+      "fechaLanzamiento": "2016-02-26",
+      "compania": "ConcernedApe",
+      "plataformas": [
+        "PC",
+        "Switch",
+        "PS5",
+        "Xbox One",
+        "Android",
+        "iOS"
+      ],
+      "categorias": [
+        "Simulación",
+        "Rol"
+      ],
+      "precio": 13.99,
+      "imagenUrl": "https://images.igdb.com/igdb/image/upload/t_cover_big/co1m3q.jpg",
+      "videoUrl": "https://www.youtube.com/watch?v=ot7uXNQskhs"
+    }
+  ]
+}
