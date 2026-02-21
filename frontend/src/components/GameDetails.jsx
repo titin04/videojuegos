@@ -21,7 +21,7 @@ function GameDetail({ videojuego, onClose, onDelete }) {
   return (
     <div className="modal-backdrop fade-in" onClick={handleBackdropClick}>
       <div className="modal-content glass designer-modal">
-        {}
+        { }
         <div
           className="ambient-bg"
           style={{ backgroundImage: `url(${imagenUrl})` }}
@@ -42,6 +42,12 @@ function GameDetail({ videojuego, onClose, onDelete }) {
                 <span>{compania}</span>
                 <span className="separator"></span>
                 <span>{fechaLanzamiento}</span>
+                {videojuego.user && (
+                  <>
+                    <span className="separator"></span>
+                    <span className="owner-badge">Publicado por: {videojuego.user.name}</span>
+                  </>
+                )}
               </div>
             </div>
 

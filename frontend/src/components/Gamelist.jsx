@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import api from "../services/api";
 import GameCard from "./GameCard";
 import GameDetail from "./GameDetails";
 import CategoryMenu from "./CategoryMenu";
@@ -20,11 +21,18 @@ function GameList() {
   const [categoriasActivas, setCategoriasActivas] = useState([]);
   const [plataformasActivas, setPlataformasActivas] = useState([]);
   const [busqueda, setBusqueda] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const cargarVideojuegos = async () => {
-    const respuesta = await fetch("http://localhost:3000/videojuegos");
-    const datos = await respuesta.json();
-    setVideojuegos(datos);
+    try {
+      setLoading(true);
+      const response = await api.get("/videojuegos");
+      setVideojuegos(response.data.videojuegos || []);
+    } catch (error) {
+      console.error("Error al cargar juegos", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -32,11 +40,13 @@ function GameList() {
   }, []);
 
   const manejarEliminar = async (id) => {
-    await fetch(`http://localhost:3000/videojuegos/${id}`, {
-      method: "DELETE"
-    });
-    setVideojuegos(prev => prev.filter(v => v.id !== id));
-    setVideojuegoSeleccionado(null);
+    try {
+      await api.delete(`/videojuegos/${id}`);
+      setVideojuegos(prev => prev.filter(v => v.id !== id));
+      setVideojuegoSeleccionado(null);
+    } catch (error) {
+      alert(error.response?.data?.error || "No pudiste eliminar este juego.");
+    }
   };
 
   const videojuegosFiltrados = videojuegos.filter(v => {
@@ -54,8 +64,13 @@ function GameList() {
     return coincideCategoria && coincidePlataforma && coincideBusqueda;
   });
 
-  if (videojuegos.length === 0) {
-    return <p>Cargando videojuegos...</p>;
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loader"></div>
+        <p>Cargando videojuegos...</p>
+      </div>
+    );
   }
 
   return (

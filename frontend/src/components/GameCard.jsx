@@ -15,6 +15,9 @@ function GameCard({ videojuego, onSelect }) {
       <div className="card-content">
         <h3>{nombre}</h3>
         <p className="card-platforms">{plataformas.join(" • ")}</p>
+        {videojuego.user && (
+          <p className="card-owner">Añadido por: <span>{videojuego.user.name}</span></p>
+        )}
         <p className="card-description">{descripcionCorta}</p>
         <div className="card-footer">
           <span className="price-tag">{precio} €</span>
