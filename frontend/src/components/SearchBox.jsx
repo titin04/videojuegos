@@ -1,17 +1,24 @@
+import { TextField, InputAdornment } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+
 function SearchBox({ busqueda, setBusqueda }) {
   return (
-    <div className="search-container">
-      <div className="search-wrapper">
-        <input
-          type="text"
-          placeholder="Busca tu próxima aventura..."
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-          className="search-input"
-        />
-        <span className="search-icon">🔍</span>
-      </div>
-    </div>
+    <TextField
+      fullWidth
+      placeholder="Buscar videojuegos..."
+      value={busqueda}
+      onChange={(e) => setBusqueda(e.target.value)}
+      variant="outlined"
+      size="small"
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <SearchIcon color="action" />
+          </InputAdornment>
+        ),
+        sx: { borderRadius: 2 }
+      }}
+    />
   );
 }
 

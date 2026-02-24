@@ -2,6 +2,15 @@ import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import GameCard from '../components/GameCard';
 import GameDetail from '../components/GameDetails';
+import {
+    Container,
+    Typography,
+    Box,
+    Grid,
+    CircularProgress,
+    Stack,
+    Alert
+} from '@mui/material';
 
 function MyGames() {
     const [videojuegos, setVideojuegos] = useState([]);
@@ -34,28 +43,42 @@ function MyGames() {
         }
     };
 
-    if (loading) return <div className="loading-screen">Cargando mis juegos...</div>;
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: 2 }}>
+                <CircularProgress size={60} />
+                <Typography variant="h6" color="text.secondary">Cargando tus juegos...</Typography>
+            </Box>
+        );
+    }
 
     return (
-        <div className="my-games-page">
-            <header className="page-header">
-                <h1>Mis Videojuegos</h1>
-                <p>Aquí puedes gestionar los títulos que has compartido con la comunidad.</p>
-            </header>
+        <Container maxWidth="lg" sx={{ py: 4 }}>
+            <Box sx={{ mb: 6 }}>
+                <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 900 }}>
+                    Mis Videojuegos
+                </Typography>
+                <Typography variant="h6" color="text.secondary">
+                    Aquí puedes gestionar los títulos que has compartido con la comunidad.
+                </Typography>
+            </Box>
 
-            <div className="games-grid">
-                {videojuegos.length === 0 ? (
-                    <p className="no-results">Aún no has añadido ningún videojuego.</p>
-                ) : (
-                    videojuegos.map(v => (
-                        <GameCard
-                            key={v.id}
-                            videojuego={v}
-                            onSelect={setVideojuegoSeleccionado}
-                        />
-                    ))
-                )}
-            </div>
+            {videojuegos.length === 0 ? (
+                <Alert severity="info" variant="outlined" sx={{ borderRadius: 2 }}>
+                    Aún no has añadido ningún videojuego.
+                </Alert>
+            ) : (
+                <Grid container spacing={3}>
+                    {videojuegos.map(v => (
+                        <Grid item key={v.id} xs={12} sm={6} md={4}>
+                            <GameCard
+                                videojuego={v}
+                                onSelect={setVideojuegoSeleccionado}
+                            />
+                        </Grid>
+                    ))}
+                </Grid>
+            )}
 
             {videojuegoSeleccionado && (
                 <GameDetail
@@ -64,7 +87,7 @@ function MyGames() {
                     onDelete={manejarEliminar}
                 />
             )}
-        </div>
+        </Container>
     );
 }
 

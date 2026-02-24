@@ -1,6 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import {
+    Container,
+    Box,
+    Paper,
+    Typography,
+    TextField,
+    Button,
+    Grid,
+    Stack,
+    Chip,
+    Divider,
+    IconButton
+} from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import SaveIcon from '@mui/icons-material/Save';
 
 const CATEGORIAS = [
     "Lucha", "Arcade", "Plataformas", "Shooter", "Estrategia",
@@ -55,85 +70,152 @@ function AddGame() {
     };
 
     return (
-        <div className="add-game-page">
-            <div className="form-card glass">
-                <h2>Añadir Nuevo Videojuego</h2>
-                <form onSubmit={handleSubmit} className="game-form">
-                    <div className="form-grid">
-                        <div className="form-group">
-                            <label>Título</label>
-                            <input name="nombre" value={formData.nombre} onChange={handleChange} required />
-                        </div>
-                        <div className="form-group">
-                            <label>Compañía</label>
-                            <input name="compania" value={formData.compania} onChange={handleChange} required />
-                        </div>
-                        <div className="form-group">
-                            <label>Precio (€)</label>
-                            <input name="precio" type="number" step="0.01" value={formData.precio} onChange={handleChange} required />
-                        </div>
-                        <div className="form-group">
-                            <label>Fecha Lanzamiento</label>
-                            <input name="fechaLanzamiento" type="date" value={formData.fechaLanzamiento} onChange={handleChange} required />
-                        </div>
-                    </div>
+        <Container maxWidth="md" sx={{ py: 4 }}>
+            <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <IconButton onClick={() => navigate(-1)} color="inherit" size="small">
+                    <ArrowBackIcon />
+                </IconButton>
+                <Typography variant="h5" sx={{ fontWeight: 800 }}>Volver</Typography>
+            </Box>
 
-                    <div className="form-group">
-                        <label>Descripción</label>
-                        <textarea name="descripcion" value={formData.descripcion} onChange={handleChange} required rows="4" />
-                    </div>
+            <Paper elevation={3} sx={{ p: 4, borderRadius: 4 }}>
+                <Typography variant="h4" gutterBottom sx={{ fontWeight: 900, mb: 4 }}>
+                    Añadir Nuevo Videojuego
+                </Typography>
 
-                    <div className="form-group">
-                        <label>Categorías</label>
-                        <div className="chips-grid">
-                            {CATEGORIAS.map(cat => (
-                                <button
-                                    key={cat}
-                                    type="button"
-                                    className={`chip ${formData.categorias.includes(cat) ? 'active' : ''}`}
-                                    onClick={() => handleToggle('categorias', cat)}
+                <Box component="form" onSubmit={handleSubmit} noValidate>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                fullWidth
+                                label="Título del videojuego"
+                                name="nombre"
+                                value={formData.nombre}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                fullWidth
+                                label="Compañía / Desarrolladora"
+                                name="compania"
+                                value={formData.compania}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                fullWidth
+                                label="Precio (€)"
+                                name="precio"
+                                type="number"
+                                inputProps={{ step: 0.01 }}
+                                value={formData.precio}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                fullWidth
+                                label="Fecha de Lanzamiento"
+                                name="fechaLanzamiento"
+                                type="date"
+                                InputLabelProps={{ shrink: true }}
+                                value={formData.fechaLanzamiento}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                multiline
+                                rows={4}
+                                label="Descripción detallada"
+                                name="descripcion"
+                                value={formData.descripcion}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 700 }}>Categorías</Typography>
+                            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                                {CATEGORIAS.map(cat => (
+                                    <Chip
+                                        key={cat}
+                                        label={cat}
+                                        onClick={() => handleToggle('categorias', cat)}
+                                        color={formData.categorias.includes(cat) ? "primary" : "default"}
+                                        variant={formData.categorias.includes(cat) ? "filled" : "outlined"}
+                                        sx={{ borderRadius: 1.5 }}
+                                    />
+                                ))}
+                            </Stack>
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 700 }}>Plataformas</Typography>
+                            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                                {PLATAFORMAS.map(plat => (
+                                    <Chip
+                                        key={plat}
+                                        label={plat}
+                                        onClick={() => handleToggle('plataformas', plat)}
+                                        color={formData.plataformas.includes(plat) ? "primary" : "default"}
+                                        variant={formData.plataformas.includes(plat) ? "filled" : "outlined"}
+                                        sx={{ borderRadius: 1.5 }}
+                                    />
+                                ))}
+                            </Stack>
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                fullWidth
+                                label="URL de la Imagen (Carátula)"
+                                name="imagenUrl"
+                                value={formData.imagenUrl}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                fullWidth
+                                label="URL del Tráiler (YouTube)"
+                                name="videoUrl"
+                                value={formData.videoUrl}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <Divider sx={{ my: 2 }} />
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                                <Button onClick={() => navigate(-1)} color="inherit">
+                                    Cancelar
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    size="large"
+                                    startIcon={<SaveIcon />}
+                                    disabled={loading}
                                 >
-                                    {cat}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="form-group">
-                        <label>Plataformas</label>
-                        <div className="chips-grid">
-                            {PLATAFORMAS.map(plat => (
-                                <button
-                                    key={plat}
-                                    type="button"
-                                    className={`chip ${formData.plataformas.includes(plat) ? 'active' : ''}`}
-                                    onClick={() => handleToggle('plataformas', plat)}
-                                >
-                                    {plat}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="form-group">
-                        <label>URL Imagen (Carátula)</label>
-                        <input name="imagenUrl" value={formData.imagenUrl} onChange={handleChange} required />
-                    </div>
-
-                    <div className="form-group">
-                        <label>URL Tráiler (YouTube/Vimeo)</label>
-                        <input name="videoUrl" value={formData.videoUrl} onChange={handleChange} required />
-                    </div>
-
-                    <div className="form-actions">
-                        <button type="button" onClick={() => navigate(-1)} className="btn-cancel">Cancelar</button>
-                        <button type="submit" disabled={loading} className="btn-submit">
-                            {loading ? 'Guardando...' : 'Crear Videojuego'}
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                                    {loading ? 'Guardando...' : 'Crear Videojuego'}
+                                </Button>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Paper>
+        </Container>
     );
 }
 

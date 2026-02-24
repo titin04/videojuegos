@@ -5,6 +5,15 @@ import GameDetail from "./GameDetails";
 import CategoryMenu from "./CategoryMenu";
 import PlatformMenu from "./PlatformMenu";
 import SearchBox from "./SearchBox";
+import {
+  Container,
+  Grid,
+  Typography,
+  Box,
+  CircularProgress,
+  Stack,
+  Alert
+} from "@mui/material";
 
 const CATEGORIAS = [
   "Lucha", "Arcade", "Plataformas", "Shooter", "Estrategia",
@@ -66,49 +75,53 @@ function GameList() {
 
   if (loading) {
     return (
-      <div className="loading-container">
-        <div className="loader"></div>
-        <p>Cargando videojuegos...</p>
-      </div>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: 2 }}>
+        <CircularProgress size={60} thickness={4} />
+        <Typography variant="h6" color="text.secondary">Cargando videojuegos...</Typography>
+      </Box>
     );
   }
 
   return (
-    <div className="games-page">
-      <div className="filters-container">
-        <SearchBox
-          busqueda={busqueda}
-          setBusqueda={setBusqueda}
-        />
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Box sx={{ mb: 4 }}>
+        <Grid container spacing={3} alignItems="center">
+          <Grid item xs={12} md={4}>
+            <SearchBox busqueda={busqueda} setBusqueda={setBusqueda} />
+          </Grid>
+          <Grid item xs={12} md={8}>
+            <Stack spacing={2}>
+              <CategoryMenu
+                categorias={CATEGORIAS}
+                categoriasActivas={categoriasActivas}
+                setCategoriasActivas={setCategoriasActivas}
+              />
+              <PlatformMenu
+                plataformas={PLATAFORMAS}
+                plataformasActivas={plataformasActivas}
+                setPlataformasActivas={setPlataformasActivas}
+              />
+            </Stack>
+          </Grid>
+        </Grid>
+      </Box>
 
-        <div className="menus-wrapper">
-          <CategoryMenu
-            categorias={CATEGORIAS}
-            categoriasActivas={categoriasActivas}
-            setCategoriasActivas={setCategoriasActivas}
-          />
-
-          <PlatformMenu
-            plataformas={PLATAFORMAS}
-            plataformasActivas={plataformasActivas}
-            setPlataformasActivas={setPlataformasActivas}
-          />
-        </div>
-      </div>
-
-      <div className="games-grid">
-        {videojuegosFiltrados.length === 0 ? (
-          <p className="no-results">No hay videojuegos que coincidan con los filtros.</p>
-        ) : (
-          videojuegosFiltrados.map(v => (
-            <GameCard
-              key={v.id}
-              videojuego={v}
-              onSelect={setVideojuegoSeleccionado}
-            />
-          ))
-        )}
-      </div>
+      {videojuegosFiltrados.length === 0 ? (
+        <Alert severity="info" variant="outlined" sx={{ borderRadius: 2 }}>
+          No hay videojuegos que coincidan con los filtros.
+        </Alert>
+      ) : (
+        <Grid container spacing={3}>
+          {videojuegosFiltrados.map(v => (
+            <Grid item key={v.id} xs={12} sm={6} md={4}>
+              <GameCard
+                videojuego={v}
+                onSelect={setVideojuegoSeleccionado}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      )}
 
       {videojuegoSeleccionado && (
         <GameDetail
@@ -117,7 +130,7 @@ function GameList() {
           onDelete={manejarEliminar}
         />
       )}
-    </div>
+    </Container>
   );
 }
 

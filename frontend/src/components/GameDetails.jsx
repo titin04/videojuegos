@@ -1,4 +1,25 @@
+import React from 'react';
+import {
+  Dialog,
+  DialogContent,
+  IconButton,
+  Typography,
+  Box,
+  Stack,
+  Chip,
+  Button,
+  Divider,
+  useMediaQuery,
+  useTheme
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+
 function GameDetail({ videojuego, onClose, onDelete }) {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
   const {
     id,
     nombre,
@@ -12,72 +33,136 @@ function GameDetail({ videojuego, onClose, onDelete }) {
     videoUrl
   } = videojuego;
 
-  const handleBackdropClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
   return (
-    <div className="modal-backdrop fade-in" onClick={handleBackdropClick}>
-      <div className="modal-content glass designer-modal">
-        { }
-        <div
-          className="ambient-bg"
-          style={{ backgroundImage: `url(${imagenUrl})` }}
-        ></div>
+    <Dialog
+      open={!!videojuego}
+      onClose={onClose}
+      fullScreen={fullScreen}
+      maxWidth="md"
+      fullWidth
+      PaperProps={{
+        sx: {
+          borderRadius: fullScreen ? 0 : 4,
+          overflow: 'hidden',
+          position: 'relative'
+        }
+      }}
+    >
+      <IconButton
+        onClick={onClose}
+        sx={{
+          position: 'absolute',
+          right: 16,
+          top: 16,
+          zIndex: 10,
+          bgcolor: 'rgba(0,0,0,0.5)',
+          '&:hover': { bgcolor: 'rgba(0,0,0,0.7)' }
+        }}
+        color="inherit"
+      >
+        <CloseIcon />
+      </IconButton>
 
-        <button className="close-btn" onClick={onClose}>&times;</button>
+      <DialogContent sx={{ p: 0 }}>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
+          {/* Image Section */}
+          <Box sx={{
+            width: { xs: '100%', md: '45%' },
+            height: { xs: 300, md: 'auto' },
+            position: 'relative'
+          }}>
+            <Box sx={{
+              position: 'absolute',
+              top: 0, left: 0, right: 0, bottom: 0,
+              backgroundImage: `url(${imagenUrl})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              filter: 'blur(10px) brightness(0.5)',
+              transform: 'scale(1.1)',
+              zIndex: 0
+            }} />
+            <Box
+              component="img"
+              src={imagenUrl}
+              alt={nombre}
+              sx={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                position: 'relative',
+                zIndex: 1,
+                p: 2
+              }}
+            />
+          </Box>
 
-        <div className="modal-body">
-          <div className="modal-poster-section">
-            <img src={imagenUrl} alt={nombre} className="modal-poster shadow-lg" />
-          </div>
+          {/* Content Section */}
+          <Box sx={{ p: 4, width: { xs: '100%', md: '55%' } }}>
+            <Stack spacing={2}>
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                {categorias.map(cat => (
+                  <Chip key={cat} label={cat} size="small" color="primary" variant="outlined" />
+                ))}
+              </Stack>
 
-          <div className="modal-content-section">
-            <div className="modal-header-hero">
-              <span className="metadata-label">{categorias.join(" / ")}</span>
-              <h2 className="display-title">{nombre}</h2>
-              <div className="credits-line">
-                <span>{compania}</span>
-                <span className="separator"></span>
-                <span>{fechaLanzamiento}</span>
-                {videojuego.user && (
-                  <>
-                    <span className="separator"></span>
-                    <span className="owner-badge">Publicado por: {videojuego.user.name}</span>
-                  </>
-                )}
-              </div>
-            </div>
+              <Typography variant="h4" sx={{ fontWeight: 900 }}>
+                {nombre}
+              </Typography>
 
-            <div className="modal-actions-top">
-              <a href={videoUrl} target="_blank" rel="noreferrer" className="btn-designer-primary">
-                Ver Vídeo
-              </a>
-              <button className="btn-designer-ghost" onClick={() => onDelete(id)}>
-                Eliminar Registro
-              </button>
-            </div>
+              <Stack direction="row" spacing={2} color="text.secondary" divider={<Divider orientation="vertical" flexItem />}>
+                <Typography variant="body2">{compania}</Typography>
+                <Typography variant="body2">{fechaLanzamiento}</Typography>
+              </Stack>
 
-            <div className="modal-synopsis">
-              <p>{descripcion}</p>
-            </div>
+              {videojuego.user && (
+                <Typography variant="caption" sx={{ bgcolor: 'action.selected', p: 1, borderRadius: 1, display: 'inline-block', width: 'fit-content' }}>
+                  Publicado por: <strong>{videojuego.user.name}</strong>
+                </Typography>
+              )}
 
-            <div className="modal-property-grid">
-              <div className="property-item">
-                <span className="metadata-label">Disponible en</span>
-                <span className="property-value">{plataformas.join(", ")}</span>
-              </div>
-              <div className="property-item">
-                <span className="metadata-label">Adquisición</span>
-                <span className="property-value highlight">{precio} €</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+              <Divider />
+
+              <Typography variant="body1" sx={{ color: 'text.secondary', lineHeight: 1.6 }}>
+                {descripcion}
+              </Typography>
+
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="subtitle2" gutterBottom>Disponible en:</Typography>
+                <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                  {plataformas.map(plat => (
+                    <Chip key={plat} label={plat} size="small" variant="filled" />
+                  ))}
+                </Stack>
+              </Box>
+
+              <Box sx={{ pt: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Typography variant="h5" color="primary" sx={{ fontWeight: 900 }}>
+                  {precio} €
+                </Typography>
+                <Stack direction="row" spacing={1}>
+                  <Button
+                    variant="outlined"
+                    startIcon={<PlayCircleOutlineIcon />}
+                    href={videoUrl}
+                    target="_blank"
+                  >
+                    Tráiler
+                  </Button>
+                  <Button
+                    variant="text"
+                    color="error"
+                    startIcon={<DeleteIcon />}
+                    onClick={() => onDelete(id)}
+                  >
+                    Eliminar
+                  </Button>
+                </Stack>
+              </Box>
+            </Stack>
+          </Box>
+        </Box>
+      </DialogContent>
+    </Dialog>
   );
 }
 

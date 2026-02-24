@@ -1,30 +1,29 @@
+import { Box, Chip, Typography, Stack } from "@mui/material";
+
 function PlatformMenu({ plataformas, plataformasActivas, setPlataformasActivas }) {
-  const handleChange = (plataforma) => {
-    if (plataformasActivas.includes(plataforma)) {
-      setPlataformasActivas(plataformasActivas.filter(p => p !== plataforma));
-    } else {
-      setPlataformasActivas([...plataformasActivas, plataforma]);
-    }
+  const togglePlataforma = (plat) => {
+    setPlataformasActivas(prev =>
+      prev.includes(plat) ? prev.filter(p => p !== plat) : [...prev, plat]
+    );
   };
 
   return (
-    <div className="filter-section">
-      <h2 className="section-title">Plataformas</h2>
-      <div className="chip-group">
-        {plataformas.map(plat => {
-          const isActive = plataformasActivas.includes(plat);
-          return (
-            <button
-              key={plat}
-              className={`chip ${isActive ? 'active' : ''}`}
-              onClick={() => handleChange(plat)}
-            >
-              {plat}
-            </button>
-          );
-        })}
-      </div>
-    </div>
+    <Box>
+      <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 700, px: 0.5 }}>Plataformas</Typography>
+      <Stack direction="row" spacing={0.5} sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+        {plataformas.map(plat => (
+          <Chip
+            key={plat}
+            label={plat}
+            onClick={() => togglePlataforma(plat)}
+            color={plataformasActivas.includes(plat) ? "primary" : "default"}
+            variant={plataformasActivas.includes(plat) ? "filled" : "outlined"}
+            size="small"
+            sx={{ borderRadius: 1 }}
+          />
+        ))}
+      </Stack>
+    </Box>
   );
 }
 

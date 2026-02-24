@@ -1,6 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import {
+    Container,
+    Box,
+    Paper,
+    Typography,
+    TextField,
+    Button,
+    Alert,
+    CircularProgress,
+    Link as MuiLink
+} from '@mui/material';
+import LoginIcon from '@mui/icons-material/Login';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -25,43 +37,69 @@ const Login = () => {
     };
 
     return (
-        <div className="auth-page">
-            <div className="auth-card glass">
-                <div className="auth-header">
-                    <h1>Bienvenido</h1>
-                    <p>Inicia sesión para gestionar tus juegos</p>
-                </div>
-                <form onSubmit={handleSubmit} className="auth-form">
-                    {error && <div className="auth-error">{error}</div>}
-                    <div className="form-group">
-                        <label>Email</label>
-                        <input
-                            type="email"
+        <Container maxWidth="xs">
+            <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Paper elevation={3} sx={{ p: 4, width: '100%', borderRadius: 3 }}>
+                    <Box sx={{ textAlign: 'center', mb: 3 }}>
+                        <Typography component="h1" variant="h4" sx={{ fontWeight: 800, mb: 1 }}>
+                            Bienvenido
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                            Inicia sesión para gestionar tus juegos
+                        </Typography>
+                    </Box>
+
+                    {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+
+                    <Box component="form" onSubmit={handleSubmit} noValidate>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="email"
+                            label="Correo Electrónico"
+                            name="email"
+                            autoComplete="email"
+                            autoFocus
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            required
-                            placeholder="tu@email.com"
+                            size="small"
                         />
-                    </div>
-                    <div className="form-group">
-                        <label>Contraseña</label>
-                        <input
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Contraseña"
                             type="password"
+                            id="password"
+                            autoComplete="current-password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            required
-                            placeholder="••••••••"
+                            size="small"
                         />
-                    </div>
-                    <button type="submit" disabled={loading} className="auth-submit">
-                        {loading ? 'Entrando...' : 'Entrar'}
-                    </button>
-                </form>
-                <p className="auth-footer">
-                    ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
-                </p>
-            </div>
-        </div>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2, py: 1.2 }}
+                            disabled={loading}
+                            startIcon={!loading && <LoginIcon />}
+                        >
+                            {loading ? <CircularProgress size={24} color="inherit" /> : 'Entrar'}
+                        </Button>
+                        <Box sx={{ textAlign: 'center', mt: 2 }}>
+                            <Typography variant="body2">
+                                ¿No tienes cuenta?{' '}
+                                <MuiLink component={Link} to="/register" sx={{ fontWeight: 600 }}>
+                                    Regístrate
+                                </MuiLink>
+                            </Typography>
+                        </Box>
+                    </Box>
+                </Paper>
+            </Box>
+        </Container>
     );
 };
 

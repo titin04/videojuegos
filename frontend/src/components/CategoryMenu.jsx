@@ -1,30 +1,29 @@
+import { Box, Chip, Typography, Stack } from "@mui/material";
+
 function CategoryMenu({ categorias, categoriasActivas, setCategoriasActivas }) {
-  const handleChange = (categoria) => {
-    if (categoriasActivas.includes(categoria)) {
-      setCategoriasActivas(categoriasActivas.filter(c => c !== categoria));
-    } else {
-      setCategoriasActivas([...categoriasActivas, categoria]);
-    }
+  const toggleCategoria = (cat) => {
+    setCategoriasActivas(prev =>
+      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
+    );
   };
 
   return (
-    <div className="filter-section">
-      <h2 className="section-title">Categorías</h2>
-      <div className="chip-group">
-        {categorias.map(cat => {
-          const isActive = categoriasActivas.includes(cat);
-          return (
-            <button
-              key={cat}
-              className={`chip ${isActive ? 'active' : ''}`}
-              onClick={() => handleChange(cat)}
-            >
-              {cat}
-            </button>
-          );
-        })}
-      </div>
-    </div>
+    <Box>
+      <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 700, px: 0.5 }}>Categorías</Typography>
+      <Stack direction="row" spacing={0.5} sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+        {categorias.map(cat => (
+          <Chip
+            key={cat}
+            label={cat}
+            onClick={() => toggleCategoria(cat)}
+            color={categoriasActivas.includes(cat) ? "primary" : "default"}
+            variant={categoriasActivas.includes(cat) ? "filled" : "outlined"}
+            size="small"
+            sx={{ borderRadius: 1 }}
+          />
+        ))}
+      </Stack>
+    </Box>
   );
 }
 
