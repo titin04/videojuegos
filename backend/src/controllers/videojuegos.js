@@ -236,10 +236,14 @@ const deleteVideojuego = async (req, res) => {
             return res.status(403).json({ error: 'Not authorized to delete this game' });
         }
 
+        // Manual cascade deletion for related data
+        await prisma.comment.deleteMany({ where: { videojuegoId: id } });
+        await prisma.vote.deleteMany({ where: { videojuegoId: id } });
         await prisma.videojuego.delete({ where: { id } });
 
-        res.json({ message: 'Game deleted successfully' });
+        res.json({ message: 'Game and related data deleted successfully' });
     } catch (error) {
+        console.error('Error deleting game:', error);
         res.status(500).json({ error: 'Error deleting game' });
     }
 };
@@ -268,11 +272,47 @@ const reportVideojuego = async (req, res) => {
     }
 };
 
+const getReportedVideojuegos = async (req, res) => {
+    try {
+        // Only admin should call this (middleware will handle eventually, but good to be explicit or at least consistent)
+        const reportedGames = await prisma.videojuego.findMany({
+            where: { reported: true },
+            include: {
+                user: { select: { name: true } }
+            },
+            orderBy: { createdAt: 'desc' }
+        });
+
+        res.json(reportedGames);
+    } catch (error) {
+        console.error('Error fetching reported games:', error);
+        res.status(500).json({ error: 'Error fetching reported games' });
+    }
+};
+
+const dismissReport = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        await prisma.videojuego.update({
+            where: { id },
+            data: { reported: false }
+        });
+
+        res.json({ message: 'Report dismissed successfully' });
+    } catch (error) {
+        console.error('Error dismissing report:', error);
+        res.status(500).json({ error: 'Error dismissing report' });
+    }
+};
+
 module.exports = {
     getAllVideojuegos,
     getMyVideojuegos,
     getVideojuegoById,
     createVideojuego,
     deleteVideojuego,
-    reportVideojuego
+    reportVideojuego,
+    getReportedVideojuegos,
+    dismissReport
 };

@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Gamelist from './components/Gamelist'; // Will refactor this soon
 import MyGames from './pages/MyGames';
 import AddGame from './pages/AddGame';
+import AdminReports from './pages/AdminReports';
 
 import './index.css';
 
@@ -45,6 +46,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <AddGame />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/reports"
+                element={
+                  <ProtectedRoute>
+                    <AdminReports />
                   </ProtectedRoute>
                 }
               />

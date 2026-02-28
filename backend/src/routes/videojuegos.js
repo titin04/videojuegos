@@ -5,7 +5,9 @@ const {
     getVideojuegoById,
     createVideojuego,
     deleteVideojuego,
-    reportVideojuego
+    reportVideojuego,
+    getReportedVideojuegos,
+    dismissReport
 } = require('../controllers/videojuegos');
 const { authMiddleware } = require('../middleware/auth');
 
@@ -15,10 +17,12 @@ const router = express.Router();
 router.use(authMiddleware);
 
 router.get('/', getAllVideojuegos);
+router.get('/reported', getReportedVideojuegos); // List for admin
 router.get('/mine', getMyVideojuegos);
 router.get('/:id', getVideojuegoById);
 router.post('/', createVideojuego);
 router.put('/:id/report', reportVideojuego);
+router.put('/:id/dismiss', dismissReport); // Admin dismiss
 router.delete('/:id', deleteVideojuego);
 
 module.exports = router;

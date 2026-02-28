@@ -15,6 +15,7 @@ import {
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
+import ReportIcon from '@mui/icons-material/Report';
 
 const Navbar = () => {
     const { user, logout } = useAuth();
@@ -58,6 +59,16 @@ const Navbar = () => {
                         <Button component={RouterLink} to="/mine" color="inherit">
                             Mis Juegos
                         </Button>
+                        {user.role === 'ADMIN' && (
+                            <Button
+                                component={RouterLink}
+                                to="/admin/reports"
+                                color="warning"
+                                startIcon={<ReportIcon />}
+                            >
+                                Reportes
+                            </Button>
+                        )}
                         <Button
                             component={RouterLink}
                             to="/add"
