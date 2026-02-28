@@ -37,7 +37,11 @@ const getAllVideojuegos = async (req, res) => {
                 where,
                 include: {
                     user: { select: { name: true } },
-                    votes: true
+                    votes: true,
+                    comments: {
+                        include: { user: { select: { name: true } } },
+                        orderBy: { createdAt: 'desc' }
+                    }
                 }
             });
 
@@ -81,7 +85,11 @@ const getAllVideojuegos = async (req, res) => {
                 take: limitValue,
                 include: {
                     user: { select: { name: true } },
-                    votes: true
+                    votes: true,
+                    comments: {
+                        include: { user: { select: { name: true } } },
+                        orderBy: { createdAt: 'desc' }
+                    }
                 },
                 orderBy: { createdAt: 'desc' }
             }),
@@ -154,7 +162,13 @@ const getVideojuegoById = async (req, res) => {
             where: { id },
             include: {
                 user: { select: { name: true } },
-                votes: true
+                votes: true,
+                comments: {
+                    include: {
+                        user: { select: { name: true } }
+                    },
+                    orderBy: { createdAt: 'desc' }
+                }
             }
         });
 

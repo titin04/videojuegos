@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const authRoutes = require('./routes/auth');
 const videojuegosRoutes = require('./routes/videojuegos');
 const votesRoutes = require('./routes/votes');
+const commentsRoutes = require('./routes/comments');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,6 +19,7 @@ app.use(morgan('dev'));
 app.use('/api/auth', authRoutes);
 app.use('/api/videojuegos', videojuegosRoutes);
 app.use('/api/votes', votesRoutes);
+app.use('/api/comments', commentsRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

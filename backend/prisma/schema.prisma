@@ -26,12 +26,13 @@ model User {
   role        Role         @default(USER)
   videojuegos Videojuego[]
   votes       Vote[]
+  comments    Comment[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 }
 
 model Videojuego {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
   nombre           String
   descripcion      String
   precio           Float
@@ -41,11 +42,12 @@ model Videojuego {
   categorias       String[]
   imagenUrl        String
   videoUrl         String
-  user             User     @relation(fields: [userId], references: [id])
-  userId           String   @db.ObjectId
+  user             User      @relation(fields: [userId], references: [id])
+  userId           String    @db.ObjectId
   votes            Vote[]
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  comments         Comment[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 }
 
 enum VoteType {
@@ -63,4 +65,15 @@ model Vote {
   createdAt    DateTime   @default(now())
 
   @@unique([userId, videojuegoId])
+}
+
+model Comment {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  content      String
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String     @db.ObjectId
+  videojuego   Videojuego @relation(fields: [videojuegoId], references: [id])
+  videojuegoId String     @db.ObjectId
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 }
