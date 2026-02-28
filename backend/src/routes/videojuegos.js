@@ -4,7 +4,8 @@ const {
     getMyVideojuegos,
     getVideojuegoById,
     createVideojuego,
-    deleteVideojuego
+    deleteVideojuego,
+    reportVideojuego
 } = require('../controllers/videojuegos');
 const { authMiddleware } = require('../middleware/auth');
 
@@ -17,6 +18,7 @@ router.get('/', getAllVideojuegos);
 router.get('/mine', getMyVideojuegos);
 router.get('/:id', getVideojuegoById);
 router.post('/', createVideojuego);
+router.put('/:id/report', reportVideojuego);
 router.delete('/:id', deleteVideojuego);
 
 module.exports = router;

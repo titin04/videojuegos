@@ -23,6 +23,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
+import FlagIcon from '@mui/icons-material/Flag';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import api from '../services/api';
 
@@ -43,6 +44,11 @@ function GameDetail({ videojuego: initialGame, onClose, onDelete }) {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
 
+  // Reporting state
+  const [openReportConfirm, setOpenReportConfirm] = useState(false);
+  const [reporting, setReporting] = useState(false);
+  const [isReported, setIsReported] = useState(initialGame.reported || false);
+
   // Get current user from local storage
   const userStr = localStorage.getItem('user');
   const currentUser = userStr ? JSON.parse(userStr) : null;
@@ -57,6 +63,7 @@ function GameDetail({ videojuego: initialGame, onClose, onDelete }) {
         const response = await api.get(`/videojuegos/${id}`);
         setVideojuego(response.data);
         setComentarios(response.data.comments || []);
+        setIsReported(response.data.reported || false);
       } catch (error) {
         console.error("Error al cargar detalles del juego", error);
       } finally {
@@ -65,6 +72,23 @@ function GameDetail({ videojuego: initialGame, onClose, onDelete }) {
     };
     fetchDetails();
   }, [id]);
+
+  const handleReport = async () => {
+    try {
+      setReporting(true);
+      await api.put(`/videojuegos/${id}/report`);
+      setIsReported(true);
+      setOpenReportConfirm(false);
+      setErrorSnack({ open: true, message: "Gracias. El contenido ha sido reportado para revisión." });
+    } catch (error) {
+      setErrorSnack({
+        open: true,
+        message: error.response?.data?.error || "Error al reportar el juego"
+      });
+    } finally {
+      setReporting(false);
+    }
+  };
 
   const handleAddComment = async () => {
     if (!nuevoComentario.trim()) return;
@@ -323,6 +347,17 @@ function GameDetail({ videojuego: initialGame, onClose, onDelete }) {
                   >
                     Borrar
                   </Button>
+                  <Divider orientation="vertical" flexItem />
+                  <Button
+                    variant={isReported ? "contained" : "text"}
+                    color="warning"
+                    startIcon={<FlagIcon />}
+                    onClick={() => !isReported && setOpenReportConfirm(true)}
+                    size="small"
+                    disabled={isReported}
+                  >
+                    {isReported ? "Reportado" : "Reportar"}
+                  </Button>
                 </Stack>
               </Box>
 
@@ -405,6 +440,30 @@ function GameDetail({ videojuego: initialGame, onClose, onDelete }) {
           </Button>
           <Button onClick={handleConfirmDelete} variant="contained" color="error" sx={{ fontWeight: 600 }}>
             Borrar definitivamente
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Report Confirmation Dialog */}
+      <Dialog open={openReportConfirm} onClose={() => setOpenReportConfirm(false)}>
+        <DialogTitle sx={{ fontWeight: 800 }}>¿Reportar contenido inapropiado?</DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" color="text.secondary">
+            ¿Estás seguro de que deseas reportar este juego? Un moderador revisará el contenido en breve.
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ p: 2 }}>
+          <Button onClick={() => setOpenReportConfirm(false)} color="inherit" sx={{ fontWeight: 600 }} disabled={reporting}>
+            Cancelar
+          </Button>
+          <Button
+            onClick={handleReport}
+            variant="contained"
+            color="warning"
+            sx={{ fontWeight: 600 }}
+            disabled={reporting}
+          >
+            {reporting ? <CircularProgress size={24} color="inherit" /> : "Reportar"}
           </Button>
         </DialogActions>
       </Dialog>

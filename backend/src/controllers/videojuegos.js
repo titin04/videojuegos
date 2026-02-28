@@ -244,10 +244,35 @@ const deleteVideojuego = async (req, res) => {
     }
 };
 
+const reportVideojuego = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const videojuego = await prisma.videojuego.findUnique({
+            where: { id }
+        });
+
+        if (!videojuego) {
+            return res.status(404).json({ error: 'Game not found' });
+        }
+
+        await prisma.videojuego.update({
+            where: { id },
+            data: { reported: true }
+        });
+
+        res.json({ message: 'Game reported successfully' });
+    } catch (error) {
+        console.error('Error reporting game:', error);
+        res.status(500).json({ error: 'Error reporting game' });
+    }
+};
+
 module.exports = {
     getAllVideojuegos,
     getMyVideojuegos,
     getVideojuegoById,
     createVideojuego,
-    deleteVideojuego
+    deleteVideojuego,
+    reportVideojuego
 };
