@@ -2,7 +2,7 @@ const prisma = require('../lib/prisma');
 
 const createComment = async (req, res) => {
     const { gameId } = req.params;
-    const { content } = req.body;
+    const { content, parentId } = req.body;
 
     if (!content || content.trim().length === 0) {
         return res.status(400).json({ error: 'Content is required' });
@@ -13,7 +13,8 @@ const createComment = async (req, res) => {
             data: {
                 content,
                 userId: req.user.id,
-                videojuegoId: gameId
+                videojuegoId: gameId,
+                parentId: parentId || null
             },
             include: {
                 user: {
@@ -34,7 +35,8 @@ const deleteComment = async (req, res) => {
 
     try {
         const comment = await prisma.comment.findUnique({
-            where: { id }
+            where: { id },
+            include: { replies: true }
         });
 
         if (!comment) {
@@ -44,6 +46,12 @@ const deleteComment = async (req, res) => {
         // Only author or admin can delete
         if (comment.userId !== req.user.id && req.user.role !== 'ADMIN') {
             return res.status(403).json({ error: 'Not authorized to delete this comment' });
+        }
+
+        // Restriction: If it has replies, only admin can delete (or we could mark as deleted, but user requested: 
+        // "borren sus propios comentarios (si no tienen respuestas)")
+        if (comment.replies.length > 0 && req.user.role !== 'ADMIN') {
+            return res.status(400).json({ error: 'Cannot delete a comment with existing replies' });
         }
 
         await prisma.comment.delete({

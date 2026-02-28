@@ -74,6 +74,12 @@ model Comment {
   userId       String     @db.ObjectId
   videojuego   Videojuego @relation(fields: [videojuegoId], references: [id])
   videojuegoId String     @db.ObjectId
+  
+  // Recursive relationship for replies
+  parent       Comment?   @relation("CommentToComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parentId     String?    @db.ObjectId
+  replies      Comment[]  @relation("CommentToComment")
+
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 }
