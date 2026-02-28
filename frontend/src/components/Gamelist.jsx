@@ -12,7 +12,12 @@ import {
   Box,
   CircularProgress,
   Stack,
-  Alert
+  Alert,
+  Pagination,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from "@mui/material";
 
 const CATEGORIAS = [
@@ -32,11 +37,27 @@ function GameList() {
   const [busqueda, setBusqueda] = useState("");
   const [loading, setLoading] = useState(true);
 
+  // Pagination states
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(6);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+
   const cargarVideojuegos = async () => {
     try {
       setLoading(true);
-      const response = await api.get("/videojuegos");
+      const params = {
+        page,
+        limit,
+        search: busqueda,
+        categorias: categoriasActivas.join(','),
+        plataformas: plataformasActivas.join(',')
+      };
+
+      const response = await api.get("/videojuegos", { params });
       setVideojuegos(response.data.videojuegos || []);
+      setTotalPages(response.data.pagination.pages || 1);
+      setTotalItems(response.data.pagination.total || 0);
     } catch (error) {
       console.error("Error al cargar juegos", error);
     } finally {
@@ -46,81 +67,109 @@ function GameList() {
 
   useEffect(() => {
     cargarVideojuegos();
-  }, []);
+  }, [page, limit, categoriasActivas, plataformasActivas, busqueda]);
 
   const manejarEliminar = async (id) => {
     try {
       await api.delete(`/videojuegos/${id}`);
-      setVideojuegos(prev => prev.filter(v => v.id !== id));
+      // Refresh current page
+      cargarVideojuegos();
       setVideojuegoSeleccionado(null);
     } catch (error) {
       alert(error.response?.data?.error || "No pudiste eliminar este juego.");
     }
   };
 
-  const videojuegosFiltrados = videojuegos.filter(v => {
-    const coincideCategoria = categoriasActivas.length === 0 || v.categorias.some(cat =>
-      categoriasActivas.includes(cat)
-    );
+  const handleChangePage = (event, value) => {
+    setPage(value);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
-    const coincidePlataforma = plataformasActivas.length === 0 || v.plataformas.some(plat =>
-      plataformasActivas.includes(plat)
-    );
-
-    const texto = (v.nombre + " " + v.descripcion).toLowerCase();
-    const coincideBusqueda = texto.includes(busqueda.toLowerCase());
-
-    return coincideCategoria && coincidePlataforma && coincideBusqueda;
-  });
-
-  if (loading) {
-    return (
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: 2 }}>
-        <CircularProgress size={60} thickness={4} />
-        <Typography variant="h6" color="text.secondary">Cargando videojuegos...</Typography>
-      </Box>
-    );
-  }
+  const handleChangeLimit = (event) => {
+    setLimit(event.target.value);
+    setPage(1); // Reset to first page
+  };
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ mb: 4 }}>
         <Grid container spacing={3} alignItems="center">
           <Grid item xs={12} md={4}>
-            <SearchBox busqueda={busqueda} setBusqueda={setBusqueda} />
+            <SearchBox busqueda={busqueda} setBusqueda={(val) => { setBusqueda(val); setPage(1); }} />
           </Grid>
           <Grid item xs={12} md={8}>
             <Stack spacing={2}>
               <CategoryMenu
                 categorias={CATEGORIAS}
                 categoriasActivas={categoriasActivas}
-                setCategoriasActivas={setCategoriasActivas}
+                setCategoriasActivas={(val) => { setCategoriasActivas(val); setPage(1); }}
               />
               <PlatformMenu
                 plataformas={PLATAFORMAS}
                 plataformasActivas={plataformasActivas}
-                setPlataformasActivas={setPlataformasActivas}
+                setPlataformasActivas={(val) => { setPlataformasActivas(val); setPage(1); }}
               />
             </Stack>
           </Grid>
         </Grid>
       </Box>
 
-      {videojuegosFiltrados.length === 0 ? (
-        <Alert severity="info" variant="outlined" sx={{ borderRadius: 2 }}>
-          No hay videojuegos que coincidan con los filtros.
-        </Alert>
+      {loading ? (
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '40vh', gap: 2 }}>
+          <CircularProgress size={60} thickness={4} />
+          <Typography variant="h6" color="text.secondary">Actualizando lista...</Typography>
+        </Box>
       ) : (
-        <Grid container spacing={3}>
-          {videojuegosFiltrados.map(v => (
-            <Grid item key={v.id} xs={12} sm={6} md={4}>
-              <GameCard
-                videojuego={v}
-                onSelect={setVideojuegoSeleccionado}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        <>
+          {videojuegos.length === 0 ? (
+            <Alert severity="info" variant="outlined" sx={{ borderRadius: 2 }}>
+              No hay videojuegos que coincidan con los filtros.
+            </Alert>
+          ) : (
+            <>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                Mostrando {videojuegos.length} de {totalItems} videojuegos
+              </Typography>
+              <Grid container spacing={3}>
+                {videojuegos.map(v => (
+                  <Grid item key={v.id} xs={12} sm={6} md={4}>
+                    <GameCard
+                      videojuego={v}
+                      onSelect={setVideojuegoSeleccionado}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+
+              <Box sx={{ mt: 6, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', justifyContent: 'center', gap: 3 }}>
+                <Pagination
+                  count={totalPages}
+                  page={page}
+                  onChange={handleChangePage}
+                  color="primary"
+                  size="large"
+                  showFirstButton
+                  showLastButton
+                />
+
+                <FormControl variant="outlined" size="small" sx={{ minWidth: 120 }}>
+                  <InputLabel id="limit-select-label">Por página</InputLabel>
+                  <Select
+                    labelId="limit-select-label"
+                    value={limit}
+                    onChange={handleChangeLimit}
+                    label="Por página"
+                  >
+                    <MenuItem value={3}>3 juegos</MenuItem>
+                    <MenuItem value={6}>6 juegos</MenuItem>
+                    <MenuItem value={12}>12 juegos</MenuItem>
+                    <MenuItem value={24}>24 juegos</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </>
+          )}
+        </>
       )}
 
       {videojuegoSeleccionado && (

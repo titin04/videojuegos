@@ -1,13 +1,33 @@
 const prisma = require('../lib/prisma');
 
 const getAllVideojuegos = async (req, res) => {
-    const { page = 1, limit = 10 } = req.query;
-    const skip = (page - 1) * limit;
+    const { page = 1, limit = 10, search = '', categorias = '', plataformas = '' } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    console.log('Search Debug - Query Params:', { search, categorias, plataformas });
+
+    // Build filter object
+    const where = {};
+    if (search) {
+        where.OR = [
+            { nombre: { contains: search, mode: 'insensitive' } },
+            { descripcion: { contains: search, mode: 'insensitive' } }
+        ];
+    }
+    if (categorias) {
+        where.categorias = { hasSome: categorias.split(',') };
+    }
+    if (plataformas) {
+        where.plataformas = { hasSome: plataformas.split(',') };
+    }
+
+    console.log('Search Debug - Generated Where:', JSON.stringify(where, null, 2));
 
     try {
         const [videojuegos, total] = await Promise.all([
             prisma.videojuego.findMany({
-                skip: parseInt(skip),
+                where,
+                skip: isNaN(skip) ? 0 : skip,
                 take: parseInt(limit),
                 include: {
                     user: {
@@ -16,7 +36,7 @@ const getAllVideojuegos = async (req, res) => {
                 },
                 orderBy: { createdAt: 'desc' }
             }),
-            prisma.videojuego.count()
+            prisma.videojuego.count({ where })
         ]);
 
         res.json({
@@ -24,10 +44,12 @@ const getAllVideojuegos = async (req, res) => {
             pagination: {
                 total,
                 page: parseInt(page),
-                pages: Math.ceil(total / limit)
+                limit: parseInt(limit),
+                pages: Math.ceil(total / parseInt(limit))
             }
         });
     } catch (error) {
+        console.error('Error fetching games:', error);
         res.status(500).json({ error: 'Error fetching games' });
     }
 };
