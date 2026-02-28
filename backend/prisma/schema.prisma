@@ -25,6 +25,7 @@ model User {
   name        String
   role        Role         @default(USER)
   videojuegos Videojuego[]
+  votes       Vote[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 }
@@ -42,6 +43,24 @@ model Videojuego {
   videoUrl         String
   user             User     @relation(fields: [userId], references: [id])
   userId           String   @db.ObjectId
+  votes            Vote[]
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+}
+
+enum VoteType {
+  LIKE
+  DISLIKE
+}
+
+model Vote {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  type         VoteType
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String     @db.ObjectId
+  videojuego   Videojuego @relation(fields: [videojuegoId], references: [id])
+  videojuegoId String     @db.ObjectId
+  createdAt    DateTime   @default(now())
+
+  @@unique([userId, videojuegoId])
 }

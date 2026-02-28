@@ -1,10 +1,19 @@
 const prisma = require('../lib/prisma');
 
 const getAllVideojuegos = async (req, res) => {
-    const { page = 1, limit = 10, search = '', categorias = '', plataformas = '' } = req.query;
-    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const {
+        page = 1,
+        limit = 10,
+        search = '',
+        categorias = '',
+        plataformas = '',
+        sortBy = 'newest'
+    } = req.query;
 
-    console.log('Search Debug - Query Params:', { search, categorias, plataformas });
+    const skipValue = (parseInt(page) - 1) * parseInt(limit);
+    const limitValue = parseInt(limit);
+
+    console.log('Search Debug - Query Params:', { search, categorias, plataformas, sortBy });
 
     // Build filter object
     const where = {};
@@ -21,31 +30,86 @@ const getAllVideojuegos = async (req, res) => {
         where.plataformas = { hasSome: plataformas.split(',') };
     }
 
-    console.log('Search Debug - Generated Where:', JSON.stringify(where, null, 2));
-
     try {
+        // If sorting by popularity, we need to calculate it for all matching games
+        if (sortBy === 'popularity') {
+            const allMatchingVideojuegos = await prisma.videojuego.findMany({
+                where,
+                include: {
+                    user: { select: { name: true } },
+                    votes: true
+                }
+            });
+
+            // Process and calculate popularity
+            let processed = allMatchingVideojuegos.map(v => {
+                const likes = v.votes.filter(vote => vote.type === 'LIKE').length;
+                const dislikes = v.votes.filter(vote => vote.type === 'DISLIKE').length;
+                const popularity = likes - dislikes;
+
+                const { votes, ...gameData } = v;
+                return {
+                    ...gameData,
+                    likes,
+                    dislikes,
+                    popularity
+                };
+            });
+
+            // Sort by popularity (descending)
+            processed.sort((a, b) => b.popularity - a.popularity);
+
+            const total = processed.length;
+            const pagedVideojuegos = processed.slice(skipValue, skipValue + limitValue);
+
+            return res.json({
+                videojuegos: pagedVideojuegos,
+                pagination: {
+                    total,
+                    page: parseInt(page),
+                    limit: limitValue,
+                    pages: Math.ceil(total / limitValue)
+                }
+            });
+        }
+
+        // Default: Sort by newest using Prisma pagination
         const [videojuegos, total] = await Promise.all([
             prisma.videojuego.findMany({
                 where,
-                skip: isNaN(skip) ? 0 : skip,
-                take: parseInt(limit),
+                skip: isNaN(skipValue) ? 0 : skipValue,
+                take: limitValue,
                 include: {
-                    user: {
-                        select: { name: true }
-                    }
+                    user: { select: { name: true } },
+                    votes: true
                 },
                 orderBy: { createdAt: 'desc' }
             }),
             prisma.videojuego.count({ where })
         ]);
 
+        // Process games to calculate counts
+        const processedVideojuegos = videojuegos.map(v => {
+            const likes = v.votes.filter(vote => vote.type === 'LIKE').length;
+            const dislikes = v.votes.filter(vote => vote.type === 'DISLIKE').length;
+            const popularity = likes - dislikes;
+
+            const { votes, ...gameData } = v;
+            return {
+                ...gameData,
+                likes,
+                dislikes,
+                popularity
+            };
+        });
+
         res.json({
-            videojuegos,
+            videojuegos: processedVideojuegos,
             pagination: {
                 total,
                 page: parseInt(page),
-                limit: parseInt(limit),
-                pages: Math.ceil(total / parseInt(limit))
+                limit: limitValue,
+                pages: Math.ceil(total / limitValue)
             }
         });
     } catch (error) {
@@ -88,14 +152,26 @@ const getVideojuegoById = async (req, res) => {
     try {
         const videojuego = await prisma.videojuego.findUnique({
             where: { id },
-            include: { user: { select: { name: true } } }
+            include: {
+                user: { select: { name: true } },
+                votes: true
+            }
         });
 
         if (!videojuego) {
             return res.status(404).json({ error: 'Game not found' });
         }
 
-        res.json(videojuego);
+        const likes = videojuego.votes.filter(vote => vote.type === 'LIKE').length;
+        const dislikes = videojuego.votes.filter(vote => vote.type === 'DISLIKE').length;
+
+        const { votes, ...gameData } = videojuego;
+
+        res.json({
+            ...gameData,
+            likes,
+            dislikes
+        });
     } catch (error) {
         res.status(500).json({ error: 'Error fetching game' });
     }

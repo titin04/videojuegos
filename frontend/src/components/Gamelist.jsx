@@ -42,6 +42,7 @@ function GameList() {
   const [limit, setLimit] = useState(6);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
+  const [sortBy, setSortBy] = useState('newest'); // 'newest' or 'popularity'
 
   const cargarVideojuegos = async () => {
     try {
@@ -51,7 +52,8 @@ function GameList() {
         limit,
         search: busqueda,
         categorias: categoriasActivas.join(','),
-        plataformas: plataformasActivas.join(',')
+        plataformas: plataformasActivas.join(','),
+        sortBy
       };
 
       const response = await api.get("/videojuegos", { params });
@@ -67,7 +69,7 @@ function GameList() {
 
   useEffect(() => {
     cargarVideojuegos();
-  }, [page, limit, categoriasActivas, plataformasActivas, busqueda]);
+  }, [page, limit, categoriasActivas, plataformasActivas, busqueda, sortBy]);
 
   const manejarEliminar = async (id) => {
     try {
@@ -88,6 +90,11 @@ function GameList() {
   const handleChangeLimit = (event) => {
     setLimit(event.target.value);
     setPage(1); // Reset to first page
+  };
+
+  const handleChangeSort = (event) => {
+    setSortBy(event.target.value);
+    setPage(1);
   };
 
   return (
@@ -112,6 +119,21 @@ function GameList() {
             </Stack>
           </Grid>
         </Grid>
+      </Box>
+
+      <Box sx={{ mb: 3, display: 'flex', justifyContent: 'flex-end' }}>
+        <FormControl variant="outlined" size="small" sx={{ minWidth: 200 }}>
+          <InputLabel id="sort-select-label">Ordenar por</InputLabel>
+          <Select
+            labelId="sort-select-label"
+            value={sortBy}
+            onChange={handleChangeSort}
+            label="Ordenar por"
+          >
+            <MenuItem value="newest">Más recientes</MenuItem>
+            <MenuItem value="popularity">Más populares</MenuItem>
+          </Select>
+        </FormControl>
       </Box>
 
       {loading ? (

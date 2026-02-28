@@ -4,6 +4,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const authRoutes = require('./routes/auth');
 const videojuegosRoutes = require('./routes/videojuegos');
+const votesRoutes = require('./routes/votes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +17,7 @@ app.use(morgan('dev'));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/videojuegos', videojuegosRoutes);
+app.use('/api/votes', votesRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
