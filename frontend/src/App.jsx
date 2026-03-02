@@ -9,6 +9,7 @@ import Gamelist from './components/Gamelist'; // Will refactor this soon
 import MyGames from './pages/MyGames';
 import AddGame from './pages/AddGame';
 import AdminReports from './pages/AdminReports';
+import AIAssistant from './components/AIAssistant';
 
 import './index.css';
 
@@ -62,6 +63,8 @@ function App() {
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
+          {/* AI Assistant – visible on all pages when logged in */}
+          <AIAssistant />
         </div>
       </Router>
     </AuthProvider>
