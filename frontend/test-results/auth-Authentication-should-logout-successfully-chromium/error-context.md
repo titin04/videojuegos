@@ -1,0 +1,264 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e6]:
+      - link "Videojuegos" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - img [ref=e8]
+        - heading "Videojuegos" [level=6] [ref=e10]
+      - generic [ref=e11]:
+        - link "Todos" [ref=e12] [cursor=pointer]:
+          - /url: /
+        - link "Mis Juegos" [ref=e13] [cursor=pointer]:
+          - /url: /mine
+        - link "Nuevo" [ref=e14] [cursor=pointer]:
+          - /url: /add
+          - img [ref=e16]
+          - text: Nuevo
+        - generic [ref=e18]:
+          - generic "Admin" [ref=e19]: A
+          - button [ref=e20] [cursor=pointer]:
+            - img [ref=e21]
+  - main [ref=e23]:
+    - generic [ref=e24]:
+      - generic [ref=e26]:
+        - generic [ref=e29]:
+          - img [ref=e31]
+          - textbox "Buscar videojuegos..." [ref=e33]
+          - group
+        - generic [ref=e35]:
+          - generic [ref=e36]:
+            - heading "Categorías" [level=6] [ref=e37]
+            - generic [ref=e38]:
+              - button "Lucha" [ref=e39] [cursor=pointer]:
+                - generic [ref=e40]: Lucha
+              - button "Arcade" [ref=e41] [cursor=pointer]:
+                - generic [ref=e42]: Arcade
+              - button "Plataformas" [ref=e43] [cursor=pointer]:
+                - generic [ref=e44]: Plataformas
+              - button "Shooter" [ref=e45] [cursor=pointer]:
+                - generic [ref=e46]: Shooter
+              - button "Estrategia" [ref=e47] [cursor=pointer]:
+                - generic [ref=e48]: Estrategia
+              - button "Simulación" [ref=e49] [cursor=pointer]:
+                - generic [ref=e50]: Simulación
+              - button "Deporte" [ref=e51] [cursor=pointer]:
+                - generic [ref=e52]: Deporte
+              - button "Aventura" [ref=e53] [cursor=pointer]:
+                - generic [ref=e54]: Aventura
+              - button "Rol" [ref=e55] [cursor=pointer]:
+                - generic [ref=e56]: Rol
+              - button "Educación" [ref=e57] [cursor=pointer]:
+                - generic [ref=e58]: Educación
+              - button "Puzzle" [ref=e59] [cursor=pointer]:
+                - generic [ref=e60]: Puzzle
+          - generic [ref=e61]:
+            - heading "Plataformas" [level=6] [ref=e62]
+            - generic [ref=e63]:
+              - button "PC" [ref=e64] [cursor=pointer]:
+                - generic [ref=e65]: PC
+              - button "PS5" [ref=e66] [cursor=pointer]:
+                - generic [ref=e67]: PS5
+              - button "Xbox One" [ref=e68] [cursor=pointer]:
+                - generic [ref=e69]: Xbox One
+              - button "Switch" [ref=e70] [cursor=pointer]:
+                - generic [ref=e71]: Switch
+              - button "Android" [ref=e72] [cursor=pointer]:
+                - generic [ref=e73]: Android
+              - button "iOS" [ref=e74] [cursor=pointer]:
+                - generic [ref=e75]: iOS
+              - button "Otras" [ref=e76] [cursor=pointer]:
+                - generic [ref=e77]: Otras
+      - generic [ref=e79]:
+        - generic [ref=e80]: Ordenar por
+        - generic [ref=e81]:
+          - combobox "Ordenar por" [ref=e82] [cursor=pointer]: Más recientes
+          - textbox: newest
+          - img
+          - group:
+            - generic: Ordenar por
+      - paragraph [ref=e83]: Mostrando 6 de 10 videojuegos
+      - generic [ref=e84]:
+        - generic [ref=e86]:
+          - 'button "Minecraft Minecraft PC PS5 Xbox One +3 Añadido por: Admin Construye y sobrevive en un mundo generado por procedimientos hecho de bloques." [ref=e87] [cursor=pointer]':
+            - img "Minecraft" [ref=e88]
+            - generic [ref=e89]:
+              - heading "Minecraft" [level=3] [ref=e90]
+              - generic [ref=e91]:
+                - generic [ref=e93]: PC
+                - generic [ref=e95]: PS5
+                - generic [ref=e97]: Xbox One
+                - generic [ref=e99]: "+3"
+              - generic [ref=e100]: "Añadido por: Admin"
+              - paragraph [ref=e101]: Construye y sobrevive en un mundo generado por procedimientos hecho de bloques.
+          - generic [ref=e102]:
+            - heading "26.99 €" [level=6] [ref=e103]
+            - generic [ref=e104]:
+              - generic [ref=e105]:
+                - button "Me gusta" [ref=e106] [cursor=pointer]:
+                  - img [ref=e107]
+                - generic [ref=e109]: "0"
+              - generic [ref=e110]:
+                - button "No me gusta" [ref=e111] [cursor=pointer]:
+                  - img [ref=e112]
+                - generic [ref=e114]: "0"
+        - generic [ref=e116]:
+          - 'button "God of War God of War PS5 PC Añadido por: Admin Kratos y su hijo Atreus se embarcan en un viaje épico por los reinos nórdicos." [ref=e117] [cursor=pointer]':
+            - img "God of War" [ref=e118]
+            - generic [ref=e119]:
+              - heading "God of War" [level=3] [ref=e120]
+              - generic [ref=e121]:
+                - generic [ref=e123]: PS5
+                - generic [ref=e125]: PC
+              - generic [ref=e126]: "Añadido por: Admin"
+              - paragraph [ref=e127]: Kratos y su hijo Atreus se embarcan en un viaje épico por los reinos nórdicos.
+          - generic [ref=e128]:
+            - heading "49.99 €" [level=6] [ref=e129]
+            - generic [ref=e130]:
+              - generic [ref=e131]:
+                - button "Me gusta" [ref=e132] [cursor=pointer]:
+                  - img [ref=e133]
+                - generic [ref=e135]: "0"
+              - generic [ref=e136]:
+                - button "No me gusta" [ref=e137] [cursor=pointer]:
+                  - img [ref=e138]
+                - generic [ref=e140]: "0"
+        - generic [ref=e142]:
+          - 'button "The Legend of Zelda: Breath of the Wild The Legend of Zelda: Breath of the Wild Switch Añadido por: Admin Un juego de aventura en mundo abierto donde exploras Hyrule con total libertad." [ref=e143] [cursor=pointer]':
+            - 'img "The Legend of Zelda: Breath of the Wild" [ref=e144]'
+            - generic [ref=e145]:
+              - 'heading "The Legend of Zelda: Breath of the Wild" [level=3] [ref=e146]'
+              - generic [ref=e149]: Switch
+              - generic [ref=e150]: "Añadido por: Admin"
+              - paragraph [ref=e151]: Un juego de aventura en mundo abierto donde exploras Hyrule con total libertad.
+          - generic [ref=e152]:
+            - heading "59.99 €" [level=6] [ref=e153]
+            - generic [ref=e154]:
+              - generic [ref=e155]:
+                - button "Me gusta" [ref=e156] [cursor=pointer]:
+                  - img [ref=e157]
+                - generic [ref=e159]: "0"
+              - generic [ref=e160]:
+                - button "No me gusta" [ref=e161] [cursor=pointer]:
+                  - img [ref=e162]
+                - generic [ref=e164]: "0"
+        - generic [ref=e166]:
+          - 'button "Stardew Valley Stardew Valley PC Switch PS5 +3 Añadido por: Administrador Has heredado la vieja parcela agrícola de tu abuelo en Stardew Valley. ¿Podrás aprender a vivir de l..." [ref=e167] [cursor=pointer]':
+            - img "Stardew Valley" [ref=e168]
+            - generic [ref=e169]:
+              - heading "Stardew Valley" [level=3] [ref=e170]
+              - generic [ref=e171]:
+                - generic [ref=e173]: PC
+                - generic [ref=e175]: Switch
+                - generic [ref=e177]: PS5
+                - generic [ref=e179]: "+3"
+              - generic [ref=e180]: "Añadido por: Administrador"
+              - paragraph [ref=e181]: Has heredado la vieja parcela agrícola de tu abuelo en Stardew Valley. ¿Podrás aprender a vivir de l...
+          - generic [ref=e182]:
+            - heading "13.99 €" [level=6] [ref=e183]
+            - generic [ref=e184]:
+              - generic [ref=e185]:
+                - button "Me gusta" [ref=e186] [cursor=pointer]:
+                  - img [ref=e187]
+                - generic [ref=e189]: "0"
+              - generic [ref=e190]:
+                - button "No me gusta" [ref=e191] [cursor=pointer]:
+                  - img [ref=e192]
+                - generic [ref=e194]: "0"
+        - generic [ref=e196]:
+          - 'button "Tetris Effect: Connected Tetris Effect: Connected PC PS5 Xbox One +1 Añadido por: Administrador Tetris como nunca lo habías visto, oído o sentido antes." [ref=e197] [cursor=pointer]':
+            - 'img "Tetris Effect: Connected" [ref=e198]'
+            - generic [ref=e199]:
+              - 'heading "Tetris Effect: Connected" [level=3] [ref=e200]'
+              - generic [ref=e201]:
+                - generic [ref=e203]: PC
+                - generic [ref=e205]: PS5
+                - generic [ref=e207]: Xbox One
+                - generic [ref=e209]: "+1"
+              - generic [ref=e210]: "Añadido por: Administrador"
+              - paragraph [ref=e211]: Tetris como nunca lo habías visto, oído o sentido antes.
+          - generic [ref=e212]:
+            - heading "39.99 €" [level=6] [ref=e213]
+            - generic [ref=e214]:
+              - generic [ref=e215]:
+                - button "Me gusta" [ref=e216] [cursor=pointer]:
+                  - img [ref=e217]
+                - generic [ref=e219]: "0"
+              - generic [ref=e220]:
+                - button "No me gusta" [ref=e221] [cursor=pointer]:
+                  - img [ref=e222]
+                - generic [ref=e224]: "0"
+        - generic [ref=e226]:
+          - 'button "Civilization VI Civilization VI PC Switch Android +1 Añadido por: Administrador Construye un imperio que resista el paso del tiempo en este galardonado juego de estrategia." [ref=e227] [cursor=pointer]':
+            - img "Civilization VI" [ref=e228]
+            - generic [ref=e229]:
+              - heading "Civilization VI" [level=3] [ref=e230]
+              - generic [ref=e231]:
+                - generic [ref=e233]: PC
+                - generic [ref=e235]: Switch
+                - generic [ref=e237]: Android
+                - generic [ref=e239]: "+1"
+              - generic [ref=e240]: "Añadido por: Administrador"
+              - paragraph [ref=e241]: Construye un imperio que resista el paso del tiempo en este galardonado juego de estrategia.
+          - generic [ref=e242]:
+            - heading "59.99 €" [level=6] [ref=e243]
+            - generic [ref=e244]:
+              - generic [ref=e245]:
+                - button "Me gusta" [ref=e246] [cursor=pointer]:
+                  - img [ref=e247]
+                - generic [ref=e249]: "0"
+              - generic [ref=e250]:
+                - button "No me gusta" [ref=e251] [cursor=pointer]:
+                  - img [ref=e252]
+                - generic [ref=e254]: "0"
+      - generic [ref=e255]:
+        - navigation "pagination navigation" [ref=e256]:
+          - list [ref=e257]:
+            - listitem [ref=e258]:
+              - button "Go to first page" [disabled]:
+                - img
+            - listitem [ref=e259]:
+              - button "Go to previous page" [disabled]:
+                - img
+            - listitem [ref=e260]:
+              - button "page 1" [ref=e261] [cursor=pointer]: "1"
+            - listitem [ref=e262]:
+              - button "Go to page 2" [ref=e263] [cursor=pointer]: "2"
+            - listitem [ref=e264]:
+              - button "Go to next page" [ref=e265] [cursor=pointer]:
+                - img [ref=e266]
+            - listitem [ref=e268]:
+              - button "Go to last page" [ref=e269] [cursor=pointer]:
+                - img [ref=e270]
+        - generic [ref=e272]:
+          - generic [ref=e273]: Por página
+          - generic [ref=e274]:
+            - combobox "Por página" [ref=e275] [cursor=pointer]: 6 juegos
+            - textbox: "6"
+            - img
+            - group:
+              - generic: Por página
+  - button "Abrir asistente de videojuegos" [ref=e276] [cursor=pointer]:
+    - generic [ref=e277]: 🤖
+  - dialog "Asistente de IA":
+    - generic:
+      - generic:
+        - generic: 🤖
+        - generic:
+          - paragraph: GameVault AI
+          - paragraph: Asistente de videojuegos
+      - generic:
+        - button "Limpiar conversación": 🗑️
+        - button "Cerrar asistente": ✕
+    - generic:
+      - generic:
+        - generic: 🤖
+        - generic: ¡Hola! 🎮 Soy tu asistente de GameVault. Puedo ayudarte a buscar y recomendar videojuegos de nuestro catálogo. ¿En qué puedo ayudarte hoy?
+    - generic:
+      - textbox "Mensaje para el asistente":
+        - /placeholder: Escribe tu pregunta sobre videojuegos...
+      - button "Enviar mensaje" [disabled]: ➤
+    - paragraph: Solo responde sobre el catálogo de GameVault
+```

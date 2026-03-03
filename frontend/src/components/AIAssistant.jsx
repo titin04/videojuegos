@@ -106,92 +106,98 @@ const AIAssistant = () => {
             </button>
 
             {/* Chat Panel */}
-            <div className={`ai-chat-panel ${isOpen ? 'ai-chat-panel--open' : ''}`} role="dialog" aria-label="Asistente de IA">
-                {/* Header */}
-                <div className="ai-chat-header">
-                    <div className="ai-chat-header__info">
-                        <span className="ai-chat-header__avatar">🤖</span>
-                        <div>
-                            <p className="ai-chat-header__title">GameVault AI</p>
-                            <p className="ai-chat-header__subtitle">Asistente de videojuegos</p>
+            {isOpen && (
+                <div
+                    className={`ai-chat-panel ai-chat-panel--open`}
+                    role="dialog"
+                    aria-label="Asistente de IA"
+                >
+                    {/* Header */}
+                    <div className="ai-chat-header">
+                        <div className="ai-chat-header__info">
+                            <span className="ai-chat-header__avatar">🤖</span>
+                            <div>
+                                <p className="ai-chat-header__title">GameVault AI</p>
+                                <p className="ai-chat-header__subtitle">Asistente de videojuegos</p>
+                            </div>
+                        </div>
+                        <div className="ai-chat-header__actions">
+                            <button
+                                className="ai-chat-header__btn"
+                                onClick={clearChat}
+                                title="Limpiar conversación"
+                                aria-label="Limpiar conversación"
+                            >
+                                🗑️
+                            </button>
+                            <button
+                                className="ai-chat-header__btn"
+                                onClick={() => setIsOpen(false)}
+                                title="Cerrar"
+                                aria-label="Cerrar asistente"
+                            >
+                                ✕
+                            </button>
                         </div>
                     </div>
-                    <div className="ai-chat-header__actions">
-                        <button
-                            className="ai-chat-header__btn"
-                            onClick={clearChat}
-                            title="Limpiar conversación"
-                            aria-label="Limpiar conversación"
-                        >
-                            🗑️
-                        </button>
-                        <button
-                            className="ai-chat-header__btn"
-                            onClick={() => setIsOpen(false)}
-                            title="Cerrar"
-                            aria-label="Cerrar asistente"
-                        >
-                            ✕
-                        </button>
-                    </div>
-                </div>
 
-                {/* Messages */}
-                <div className="ai-chat-messages" id="ai-chat-messages">
-                    {messages.map((msg, idx) => (
-                        <div
-                            key={idx}
-                            className={`ai-bubble ${msg.role === 'user' ? 'ai-bubble--user' : 'ai-bubble--bot'}`}
-                        >
-                            {msg.role === 'assistant' && (
+                    {/* Messages */}
+                    <div className="ai-chat-messages" id="ai-chat-messages">
+                        {messages.map((msg, idx) => (
+                            <div
+                                key={idx}
+                                className={`ai-bubble ${msg.role === 'user' ? 'ai-bubble--user' : 'ai-bubble--bot'}`}
+                            >
+                                {msg.role === 'assistant' && (
+                                    <span className="ai-bubble__avatar">🤖</span>
+                                )}
+                                <div className="ai-bubble__content">
+                                    {msg.content}
+                                </div>
+                            </div>
+                        ))}
+
+                        {/* Loading indicator */}
+                        {isLoading && (
+                            <div className="ai-bubble ai-bubble--bot">
                                 <span className="ai-bubble__avatar">🤖</span>
-                            )}
-                            <div className="ai-bubble__content">
-                                {msg.content}
+                                <div className="ai-bubble__content ai-bubble__content--typing">
+                                    <span className="ai-typing-dot" />
+                                    <span className="ai-typing-dot" />
+                                    <span className="ai-typing-dot" />
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        )}
+                        <div ref={messagesEndRef} />
+                    </div>
 
-                    {/* Loading indicator */}
-                    {isLoading && (
-                        <div className="ai-bubble ai-bubble--bot">
-                            <span className="ai-bubble__avatar">🤖</span>
-                            <div className="ai-bubble__content ai-bubble__content--typing">
-                                <span className="ai-typing-dot" />
-                                <span className="ai-typing-dot" />
-                                <span className="ai-typing-dot" />
-                            </div>
-                        </div>
-                    )}
-                    <div ref={messagesEndRef} />
+                    {/* Input Area */}
+                    <div className="ai-chat-input-area">
+                        <textarea
+                            ref={inputRef}
+                            id="ai-chat-input"
+                            className="ai-chat-input"
+                            placeholder="Escribe tu pregunta sobre videojuegos..."
+                            value={input}
+                            onChange={e => setInput(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            rows={1}
+                            disabled={isLoading}
+                            aria-label="Mensaje para el asistente"
+                        />
+                        <button
+                            id="ai-chat-send"
+                            className={`ai-chat-send-btn ${isLoading ? 'ai-chat-send-btn--disabled' : ''}`}
+                            onClick={sendMessage}
+                            disabled={isLoading || !input.trim()}
+                            aria-label="Enviar mensaje"
+                        >
+                            ➤
+                        </button>
+                    </div>
+                    <p className="ai-chat-footer">Solo responde sobre el catálogo de GameVault</p>
                 </div>
-
-                {/* Input Area */}
-                <div className="ai-chat-input-area">
-                    <textarea
-                        ref={inputRef}
-                        id="ai-chat-input"
-                        className="ai-chat-input"
-                        placeholder="Escribe tu pregunta sobre videojuegos..."
-                        value={input}
-                        onChange={e => setInput(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                        rows={1}
-                        disabled={isLoading}
-                        aria-label="Mensaje para el asistente"
-                    />
-                    <button
-                        id="ai-chat-send"
-                        className={`ai-chat-send-btn ${isLoading ? 'ai-chat-send-btn--disabled' : ''}`}
-                        onClick={sendMessage}
-                        disabled={isLoading || !input.trim()}
-                        aria-label="Enviar mensaje"
-                    >
-                        ➤
-                    </button>
-                </div>
-                <p className="ai-chat-footer">Solo responde sobre el catálogo de GameVault</p>
-            </div>
+            )}
 
             {/* Backdrop (mobile) */}
             {isOpen && <div className="ai-backdrop" onClick={() => setIsOpen(false)} />}

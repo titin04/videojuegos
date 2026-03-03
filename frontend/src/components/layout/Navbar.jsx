@@ -93,7 +93,13 @@ const Navbar = () => {
                                     {user.name.charAt(0).toUpperCase()}
                                 </Avatar>
                             </Tooltip>
-                            <IconButton onClick={handleLogout} color="inherit" size="small">
+                            <IconButton
+                                onClick={handleLogout}
+                                color="inherit"
+                                size="small"
+                                aria-label="Cerrar sesión"
+                                data-testid="logout-button"
+                            >
                                 <LogoutIcon fontSize="small" />
                             </IconButton>
                         </Box>
