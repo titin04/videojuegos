@@ -64,7 +64,7 @@ Recuerda: SOLO puedes recomendar y hablar sobre los juegos de esa lista.`;
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                model: 'lfm2.5-thinking:1.2b',
+                model: 'llama3.2:1b',
                 messages,
                 stream: false,
                 options: {
